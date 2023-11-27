@@ -2,6 +2,7 @@ import * as readline from 'readline'
 import isGameOver from './isGameOver'
 import Position from './Position'
 import makeMove from './makeMove'
+import gameState from './gameState'
 
 const rl = readline.createInterface({
     input: process.stdin,
@@ -22,4 +23,4 @@ while(!isGameOver){
     })
     makeMove(ip, fp)
 }
-console.log("Game over")
+console.log("Game over, final game state: "+gameState)
