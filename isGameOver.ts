@@ -1,17 +1,17 @@
+import Game from "./Game";
 import Position from "./Position";
 import checkIfKingIsInCheck from "./checkIfKingIsInCheck";
-import gameState from "./gameState";
 import isMoveLegal from "./isMoveLegal";
 
-export default function isGameOver(){
+export default function isGameOver(game: Game){
     const defaultPosition = new Position(0,0)
-    var isKingInCheck = checkIfKingIsInCheck(gameState.board, gameState.alivePiecesList, defaultPosition, defaultPosition)
-    var isLegalMoveAvailable = false
-    for(var pieceIndex=0;pieceIndex<gameState.alivePiecesList.length;pieceIndex++){
-        if(gameState.alivePiecesList[pieceIndex].getColor()==gameState.turn){
-            var squaresAccessibleToOwnsPiece = gameState.alivePiecesList[pieceIndex].getAccessibleSquares(gameState.board)
-            for(var squareIndex=0;squareIndex<squaresAccessibleToOwnsPiece.length;squareIndex++){
-                if(isMoveLegal(gameState.alivePiecesList[pieceIndex].getPosition(), squaresAccessibleToOwnsPiece[squareIndex])){
+    const isKingInCheck = checkIfKingIsInCheck(game, defaultPosition, defaultPosition)
+    let isLegalMoveAvailable = false
+    for(let pieceIndex=0;pieceIndex<game.alivePiecesList.length;pieceIndex++){
+        if(game.alivePiecesList[pieceIndex].getColor()==game.turn){
+            const squaresAccessibleToOwnsPiece = game.alivePiecesList[pieceIndex].getAccessibleSquares(game.board)
+            for(let squareIndex=0;squareIndex<squaresAccessibleToOwnsPiece.length;squareIndex++){
+                if(isMoveLegal(game, game.alivePiecesList[pieceIndex].position, squaresAccessibleToOwnsPiece[squareIndex])){
                     isLegalMoveAvailable = true
                     break
                 }
@@ -20,10 +20,10 @@ export default function isGameOver(){
     }
     if(!isLegalMoveAvailable){
         if(isKingInCheck){
-            gameState.isCheckmate = true
+            game.isCheckmate = true
         }
         else{
-            gameState.isStalemate = true
+            game.isStalemate = true
         }
         return true
     }

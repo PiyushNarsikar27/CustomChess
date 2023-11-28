@@ -5,7 +5,7 @@ import Position from "./Position"
 
 export default class Piece{
     private pieceType: PieceType
-    private position: Position
+    position: Position
     private color: Color
     private canJump: boolean
     private moveStrategy: MoveStrategy
@@ -18,14 +18,14 @@ export default class Piece{
         this.canJump = canJump
     }
 
+    copy(){
+        return new Piece(this.moveStrategy, this.pieceType, this.position, this.color, this.canJump)
+    }
+
     getPieceType(){
         return this.pieceType
     }
-
-    getPosition(): Position{
-        return this.position
-    }
-
+    
     getColor(): Color{
         return this.color
     }

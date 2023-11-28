@@ -1,26 +1,27 @@
 import Color from "./Color";
+import Game from "./Game";
 import Position from "./Position";
-import gameState from "./gameState";
 import isMoveLegal from "./isMoveLegal";
 
-export default function makeMove(initialPosition: Position, intendedPosition: Position){
+export default function makeMove(game: Game, initialPosition: Position, intendedPosition: Position){
     //playerToMoveIsMovingCheck()
     //iPFPValidation()
     //pieceColorCheck()
-    if(isMoveLegal(initialPosition, intendedPosition)){
-        var pieceToCapture = gameState.board[intendedPosition.x][intendedPosition.y]
-        gameState.board[intendedPosition.x][intendedPosition.y]=gameState.board[initialPosition.x][initialPosition.y]
-        gameState.board[initialPosition.x][initialPosition.y]=null
+    if(isMoveLegal(game, initialPosition, intendedPosition)){
+        const pieceToCapture = game.board[intendedPosition.x][intendedPosition.y]
+        game.board[intendedPosition.x][intendedPosition.y]=game.board[initialPosition.x][initialPosition.y]
+        game.board[initialPosition.x][initialPosition.y]=null
+        game.board[intendedPosition.x][intendedPosition.y]!.position=new Position(intendedPosition.x, intendedPosition.y)
         if(pieceToCapture!=null){
-            gameState.alivePiecesList=gameState.alivePiecesList.filter(piece => {
-                piece!=pieceToCapture
+            game.alivePiecesList=game.alivePiecesList.filter(piece => {
+                return piece!=pieceToCapture
             })
         }
-        if(gameState.turn==Color.black){
-            gameState.turn = Color.white
+        if(game.turn==Color.black){
+            game.turn = Color.white
         }
         else{
-            gameState.turn = Color.black
+            game.turn = Color.black
         }
     }
 }
