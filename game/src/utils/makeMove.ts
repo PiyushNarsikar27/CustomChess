@@ -1,12 +1,16 @@
 import Color from "../types/Color";
 import Game from "../types/Game";
 import Position from "../types/Position";
+import isGameOver from "./isGameOver";
 import isMoveLegal from "./isMoveLegal";
 
-export default function makeMove(game: Game, initialPosition: Position, intendedPosition: Position){
+export default function makeMove(game: Game, initialPosition: Position, intendedPosition: Position): Game{
     //playerToMoveIsMovingCheck()
     //iPFPValidation()
     //pieceColorCheck()
+    if(isGameOver(game)){
+        return game
+    }
     if(isMoveLegal(game, initialPosition, intendedPosition)){
         const pieceToCapture = game.board[intendedPosition.x][intendedPosition.y]
         game.board[intendedPosition.x][intendedPosition.y]=game.board[initialPosition.x][initialPosition.y]
@@ -23,5 +27,7 @@ export default function makeMove(game: Game, initialPosition: Position, intended
         else{
             game.turn = Color.black
         }
+        isGameOver(game)
     }
+    return game
 }

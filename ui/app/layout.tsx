@@ -1,5 +1,6 @@
 import type { Metadata } from 'next'
 import { Inter } from 'next/font/google'
+import StoreProvider from './StoreProvider'
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -18,7 +19,7 @@ export default function RootLayout({
       <head>
         <link href="https://unpkg.com/tailwindcss@^2/dist/tailwind.min.css" rel="stylesheet"></link>
       </head>
-      <body className={inter.className}>{children}</body>
+      <StoreProvider><body className={inter.className}>{children}</body></StoreProvider>
     </html>
   )
 }

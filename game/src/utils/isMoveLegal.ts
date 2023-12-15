@@ -18,6 +18,5 @@ export default function isMoveLegal(game: Game, initialPosition: Position, inten
     if(!intendedPositionInAccessibleSquares){
         return false
     }
-    
     return (!checkIfKingIsInCheck(game, initialPosition, intendedPosition))
 }
