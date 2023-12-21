@@ -1,18 +1,30 @@
 "using client";
 
 import { useAppDispatch, useAppSelector } from "@/lib/hooks";
-import { updateMoveInput } from "../reducers/gameStateSliceReducer";
+import { fetchInitialState, updateMoveInput } from "../reducers/gameStateSliceReducer";
 import { Piece } from "./piece";
+import { useEffect, useMemo } from "react";
+import { connectToWSServer } from "@/app/client/websocketClient";
 
-export function Board() {
+export function Board(props:{gameId:string}) {
+  let ws=useMemo(connectToWSServer, [])
   const dispatch = useAppDispatch();
+  useEffect(()=>{
+    ws.onmessage = (event)=>{
+      dispatch(updateMoveInput(event.data as string));
+    }
+  })
+  useEffect(() => {
+    dispatch(fetchInitialState(props.gameId));
+  }, [dispatch, props.gameId]);
   const gameState = useAppSelector((state) => state.gameState);
   const handleSquareClick = (
     e: React.MouseEvent<HTMLDivElement, MouseEvent>
   ) => {
     const clickedSquare = (e.target as HTMLElement).id;
+    ws.send(clickedSquare)
     dispatch(updateMoveInput(clickedSquare));
-  };
+  }
   const renderSquares = () => {
     const squares: JSX.Element[] = [];
     for (let row = 0; row < 8; row++) {

@@ -5,6 +5,6 @@ import GameComponent from "./game/[gameId]/page";
 export default function Home() {
   return <div>
     This is CC
-    <GameComponent/>
+    <GameComponent params={{gameId: "asdg"}}/>
     </div>
 }

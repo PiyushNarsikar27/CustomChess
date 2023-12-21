@@ -1,8 +1,9 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import { PayloadAction } from "@reduxjs/toolkit";
 import Game from "../../../../game/src/types/Game";
 import makeMove from "../../../../game/src/utils/makeMove";
 import Position from "../../../../game/src/types/Position";
+import GameSchema from "../../../../game/src/types/dbschemas/GameSchema"
 
 interface GameState {
   moveInput: {
@@ -12,10 +13,25 @@ interface GameState {
   game: Game;
 }
 
+export const fetchInitialState = createAsyncThunk(
+  'gameState/fetchInitialState',
+  async (gameId:string, { getState, rejectWithValue }):Promise<Game> => {
+      const response = await fetch(`http://localhost:8000/game/${gameId}`);
+      const gameFromDB:GameSchema = await response.json();
+      const moveList = gameFromDB.moves;
+      let game = new Game()
+      for(const move of moveList){
+        game = makeMove(game, move.initialPosition, move.finalPosition)
+      }
+      return game;
+  }
+);
+
 const initialState: GameState = {
   moveInput: { initialSquare: "", finalSquare: "" },
   game: new Game(),
 };
+
 export const gameStateSlice = createSlice({
   name: "gameState",
   initialState,
@@ -54,7 +70,6 @@ export const gameStateSlice = createSlice({
           },
           game: newGame,
         };
-        console.log(x === prevState);
         return x;
       } else {
         const x = {
@@ -64,6 +79,20 @@ export const gameStateSlice = createSlice({
         return x;
       }
     },
+  },
+  extraReducers: (builder) => {
+    builder
+      // .addCase(fetchInitialState.pending, (state) => {
+      //   state.loading = true;
+      // })
+      .addCase(fetchInitialState.fulfilled, (state, action) => {
+        // state.loading = false;
+        state.game = action.payload;
+      })
+      // .addCase(fetchInitialState.rejected, (state, action) => {
+      //   state.loading = false;
+      //   state.error = action.payload;
+      // });
   },
 });
 

@@ -6,9 +6,8 @@ import isMoveLegal from "./isMoveLegal";
 
 export default function makeMove(game: Game, initialPosition: Position, intendedPosition: Position): Game{
     //playerToMoveIsMovingCheck()
-    //iPFPValidation()
-    //pieceColorCheck()
-    if(isGameOver(game)){
+    //null check below
+    if(isGameOver(game) || game.board[initialPosition.x][initialPosition.y]?.getColor()!=game.turn){
         return game
     }
     if(isMoveLegal(game, initialPosition, intendedPosition)){
