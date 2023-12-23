@@ -41,14 +41,13 @@ export const gameStateSlice = createSlice({
       clickedSquare: PayloadAction<string>
     ): GameState => {
       if (prevState.moveInput.initialSquare == "") {
-        const x = {
+        return {
           moveInput: {
             ...prevState.moveInput,
             initialSquare: clickedSquare.payload,
           },
           game: prevState.game as Game,
         };
-        return x;
       } else if (prevState.moveInput.finalSquare == "") {
         const initialPostion = new Position(
           parseInt(prevState.moveInput.initialSquare[0]),
@@ -63,22 +62,35 @@ export const gameStateSlice = createSlice({
           initialPostion,
           finalPosition
         );
-        const x = {
+        return {
           moveInput: {
             ...prevState.moveInput,
             finalSquare: clickedSquare.payload,
           },
           game: newGame,
         };
-        return x;
       } else {
-        const x = {
+        return {
           moveInput: { initialSquare: clickedSquare.payload, finalSquare: "" },
           game: prevState.game as Game,
         };
-        return x;
       }
     },
+    movePiece: (prevState, move: PayloadAction<string>): GameState => {
+      const {initialPosition, finalPosition} = JSON.parse(move.payload)
+      const newGame = makeMove(
+        prevState.game as Game,
+        initialPosition,
+        finalPosition
+      );
+      return {
+        moveInput: {
+          initialSquare: initialPosition,
+          finalSquare: finalPosition,
+        },
+        game: newGame,
+      };
+    }
   },
   extraReducers: (builder) => {
     builder
@@ -96,5 +108,5 @@ export const gameStateSlice = createSlice({
   },
 });
 
-export const { updateMoveInput } = gameStateSlice.actions;
+export const { updateMoveInput, movePiece } = gameStateSlice.actions;
 export default gameStateSlice.reducer;

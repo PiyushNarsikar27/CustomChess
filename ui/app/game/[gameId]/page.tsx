@@ -1,6 +1,6 @@
 "use client"
 
-import { Board } from "../components/board"
+import { Board } from "../components/Board"
 
 export default function GameComponent({ params }: { params: { gameId: string } }) {
   return (

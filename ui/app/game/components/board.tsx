@@ -1,19 +1,20 @@
 "using client";
 
 import { useAppDispatch, useAppSelector } from "@/lib/hooks";
-import { fetchInitialState, updateMoveInput } from "../reducers/gameStateSliceReducer";
-import { Piece } from "./piece";
+import { fetchInitialState, movePiece, updateMoveInput } from "../reducers/gameStateSliceReducer";
+import { Piece } from "./Piece";
 import { useEffect, useMemo } from "react";
 import { connectToWSServer } from "@/app/client/websocketClient";
+import Position from "../../../../game/src/types/Position";
+import isMoveLegal from "../../../../game/src/utils/isMoveLegal";
 
 export function Board(props:{gameId:string}) {
-  let ws=useMemo(connectToWSServer, [])
   const dispatch = useAppDispatch();
-  useEffect(()=>{
-    ws.onmessage = (event)=>{
-      dispatch(updateMoveInput(event.data as string));
-    }
-  })
+  // useEffect(()=>{
+  //   ws.onmessage = (event)=>{
+  //     dispatch(movePiece(event.data));
+  //   }
+  // })
   useEffect(() => {
     dispatch(fetchInitialState(props.gameId));
   }, [dispatch, props.gameId]);
@@ -22,7 +23,17 @@ export function Board(props:{gameId:string}) {
     e: React.MouseEvent<HTMLDivElement, MouseEvent>
   ) => {
     const clickedSquare = (e.target as HTMLElement).id;
-    ws.send(clickedSquare)
+    if(gameState.moveInput.initialSquare!="" && gameState.moveInput.finalSquare==""){
+      const initialPosition = new Position(parseInt(gameState.moveInput.initialSquare[0]), parseInt(gameState.moveInput.initialSquare[1]))
+      const finalPosition = new Position(parseInt(clickedSquare[0]), parseInt(clickedSquare[1]))
+      // if(isMoveLegal(gameState.game, initialPosition, finalPosition)){
+      //   ws.send(JSON.stringify({
+      //     initialPosition: initialPosition,
+      //     finalPosition:finalPosition,
+      //     gameId: props.gameId
+      //   }))
+      // }
+    }
     dispatch(updateMoveInput(clickedSquare));
   }
   const renderSquares = () => {
@@ -31,7 +42,7 @@ export function Board(props:{gameId:string}) {
       for (let col = 0; col < 8; col++) {
         const isEvenSquare = (row + col) % 2 === 0;
         const piece = gameState.game.board[col][Math.abs(row - 7)];
-        const squareColor = isEvenSquare ? "bg-gray-300" : "bg-gray-700";
+        const squareColor = isEvenSquare ? "bg-blue-300" : "bg-green-700";
         squares.push(
           <div
             id={`${col}${Math.abs(row - 7)}`}

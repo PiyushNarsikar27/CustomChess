@@ -1,10 +1,12 @@
 import { gameStateSlice } from '@/app/game/reducers/gameStateSliceReducer'
+import { homeStateSlice } from '@/app/reducers/homeStateSlice'
 import { configureStore  } from '@reduxjs/toolkit'
 
 export const makeStore = () => {
   return configureStore({
     reducer: {
       gameState:gameStateSlice.reducer,
+      homeState: homeStateSlice.reducer
     },
     middleware: (getDefaultMiddleware) => getDefaultMiddleware().concat(),
   })

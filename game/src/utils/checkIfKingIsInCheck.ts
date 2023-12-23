@@ -2,15 +2,22 @@ import Color from "../types/Color"
 import Game from "../types/Game"
 import Position from "../types/Position"
 import Piece from "../types/Piece"
+import PieceType from "../types/PieceType"
 
 export default function checkIfKingIsInCheck(game: Game, movedPieceInitialPosition: Position, movedPieceFinalPosition: Position): boolean{
-    let kingInPossibleChcek: Piece
-    if(game.turn==Color.black){
-        kingInPossibleChcek = game.blackKing
+    let posOfKingInPossibleCheck: Position
+    if(movedPieceInitialPosition!=movedPieceFinalPosition && (game.board[movedPieceInitialPosition.x][movedPieceInitialPosition.y].getPieceType()==PieceType.King)){
+        posOfKingInPossibleCheck = movedPieceFinalPosition
     }
     else{
-        kingInPossibleChcek = game.whiteKing
+        if(game.turn==Color.black){
+            posOfKingInPossibleCheck = game.blackKing.position
+        }
+        else{
+            posOfKingInPossibleCheck = game.whiteKing.position
+        }
     }
+    
     const board = game.board.map(pieces=>{
         const piecesCopy: (Piece|null)[] = []
         pieces.forEach(piece=>{
@@ -41,8 +48,8 @@ export default function checkIfKingIsInCheck(game: Game, movedPieceInitialPositi
         if(alivePiecesList[pieceIndex].getColor()!=game.turn){
             const squaresAccessibleToOpponentPiece = alivePiecesList[pieceIndex].getAccessibleSquares(board)
             for(let squareIndex=0;squareIndex<squaresAccessibleToOpponentPiece.length;squareIndex++){
-                if(squaresAccessibleToOpponentPiece[squareIndex].x==kingInPossibleChcek.position.x &&
-                squaresAccessibleToOpponentPiece[squareIndex].y==kingInPossibleChcek.position.y){
+                if(squaresAccessibleToOpponentPiece[squareIndex].x==posOfKingInPossibleCheck.x &&
+                squaresAccessibleToOpponentPiece[squareIndex].y==posOfKingInPossibleCheck.y){
                     return true
                 }
             }

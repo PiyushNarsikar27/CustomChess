@@ -4,7 +4,7 @@ import checkIfKingIsInCheck from "./checkIfKingIsInCheck";
 import isMoveLegal from './isMoveLegal'
 
 export default function isGameOver(game: Game){
-    const defaultPosition = new Position(0,0)
+    const defaultPosition = new Position(1000, 1000)
     const isKingInCheck = checkIfKingIsInCheck(game, defaultPosition, defaultPosition)
     let isLegalMoveAvailable = false
     for(let pieceIndex=0;pieceIndex<game.alivePiecesList.length;pieceIndex++){
