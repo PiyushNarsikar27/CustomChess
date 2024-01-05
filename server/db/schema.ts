@@ -1,5 +1,5 @@
 type GameSchema = {
-    moves: Move[]
+    moves: Move[];
 }
 
 type Move = {
@@ -10,4 +10,14 @@ type Move = {
 type Position = {
     x:string;
     y:string;
+}
+
+type UserSchema = {
+    customerHash:string;
+    username:string;
+    password:string;
+    email:string;
+    emailVerified:boolean;
+    emailVerificationToken:string;
+    changePasswordOneTimeToken:string;
 }

@@ -29,10 +29,12 @@ export default function RootLayout({
         <body className={inter.className}>
         <NavBar
         navItems={[
-          { label: 'Create a game', link: '/creategame' },
-          { label: 'How it works', link: '/' },
-          { label: 'Profile', link: '/' },
-          { label: 'Logout', link: '/' }
+          { label: 'Create a game', link: '/creategame', showWhenLoggedIn:true, showWhenNotLoggedIn:false, action:'' },
+          { label: 'Sign Up', link: '/',  showWhenLoggedIn:false, showWhenNotLoggedIn:true, action:'signup' },
+          { label: 'Login', link: '/',  showWhenLoggedIn:false, showWhenNotLoggedIn:true, action:'login' },
+          { label: 'How it works', link: '/',  showWhenLoggedIn:true, showWhenNotLoggedIn:true, action:'' },
+          { label: 'Profile', link: '/',  showWhenLoggedIn:true, showWhenNotLoggedIn:false, action:'' },
+          { label: 'Logout', link: '/',  showWhenLoggedIn:true, showWhenNotLoggedIn:false, action:'logout' }
         ]}
       />
           <div className="flex-grow bg-gradient-to-r from-blue-600 to-blue-400 p-4 md:p-8">{children}</div>
